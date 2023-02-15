@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -10,17 +11,47 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Validate user request.
      */
-    public function create(): View
+    private function getValidationRoules($table = 'users')
     {
-        return view('auth.register');
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:' . $table],
+            'password' => ['required', Rules\Password::defaults()],
+        ];
+
+        if ($table === 'users') {
+            $rules['accept_terms'] = ['required'];
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Redirect to the login route for admin or,
+     * display the registration view.
+     */
+    public function create(): View | RedirectResponse
+    {
+        if (!isAdminRoute()) {
+            return view("auth.frontend.register");
+        }
+
+        $hasAdminAlready = Admin::where('role', 'admin')->first();
+
+        if ($hasAdminAlready) {
+            return redirect()->route('admin.login');
+        }
+
+        return view('auth.backend.register');
     }
 
     /**
@@ -30,22 +61,42 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        $isAdmin = isAdminRoute();
+        $guard = 'web';
+        $rules = $this->getValidationRoules('users');
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        if ($isAdmin) {
+            $guard = 'admin';
+            $rules = $this->getValidationRoules('admins');
+        }
+
+        $validated = $request->validate($rules);
+
+        if ($isAdmin) {
+            $user = Admin::create([
+                ...$validated,
+                'role' => 'admin',
+                'password' => Hash::make($request->password),
+            ]);
+        } else {
+            $user = User::create([
+                ...$validated,
+                'accept_terms' => true,
+                'password' => Hash::make($request->password),
+            ]);
+        }
 
         event(new Registered($user));
 
-        Auth::login($user);
+        if ($guard === 'web') {
+            Auth::guard('admin')->logout();
+            $redirectedPath = RouteServiceProvider::HOME;
+        } else {
+            Auth::guard('web')->logout();
+            $redirectedPath = RouteServiceProvider::Dashboard;
+        }
 
-        return redirect(RouteServiceProvider::HOME);
+        Auth::guard($guard)->login($user);
+        return redirect($redirectedPath);
     }
 }

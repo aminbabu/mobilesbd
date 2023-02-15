@@ -12,13 +12,14 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     /**
+     *
      * Display the user's profile form.
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $view = $request->user()->role ===  'subscriber' ? 'frontend' : 'backend';
+
+        return view("{$view}.pages.profile.edit", ['user' => $request->user()]);
     }
 
     /**
@@ -34,7 +35,9 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        $guard = $request->user()->role === 'subscriber' ? '' : 'dashboard.';
+
+        return Redirect::route("{$guard}profile.edit")->with('status', 'profile-updated');
     }
 
     /**
@@ -42,17 +45,26 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current-password'],
-        ]);
-
         $user = $request->user();
 
-        Auth::logout();
+        $guard = $user->role === 'subscriber' ? 'web' : 'admin';
+
+        $request->validateWithBag('accountDelition', [
+            'delete_password' => [
+                'required', 'current_password:' . $guard
+            ],
+            [
+                'delete_password.required' => 'The :attribute field is required.',
+                'delete_password.current_password' => 'The :attribute confirmation does not match.',
+            ]
+        ]);
+
+        Auth::guard($guard)->logout();
 
         $user->delete();
 
         $request->session()->invalidate();
+
         $request->session()->regenerateToken();
 
         return Redirect::to('/');

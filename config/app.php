@@ -73,6 +73,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Charset Configuration
+    |--------------------------------------------------------------------------
+    |
+    | The application charset determines the default charset that will be used
+    | by document. You are free to set this value to any of the chartset which
+    | will be supported by the application.
+    |
+    */
+
+    'charset' => 'utf-8',
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Locale Configuration
     |--------------------------------------------------------------------------
     |

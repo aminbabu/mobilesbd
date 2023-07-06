@@ -4,9 +4,13 @@
     justify-content: center;
 }
 
-.sa-toolbar-user__avatar > * {
-    max-width: 2rem;
-    height: auto;
+.sa-toolbar-user__avatar img {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50rem;
+    object-fit: cover;
+    object-position: center;
 }
 
 .sa-symbol--profile-photo {
@@ -14,30 +18,16 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    width: fit-content;
-    height: fit-content;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50rem;
     overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.sa-symbol--profile-photo > svg,
-.sa-symbol--profile-photo > img {
+.sa-symbol--profile-photo img {
     width: 100%;
-    height: auto;
-}
-
-.sa-symbol--profile-photo .overlay {
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    transition: 300ms;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.sa-symbol--profile-photo:hover .overlay {
-    opacity: 1;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }

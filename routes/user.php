@@ -11,5 +11,7 @@ Route::middleware(['auth:web'])->prefix('profile')->namespace('Profile')->name('
 
     Route::patch('/', [ProfileController::class, 'update'])->name('update');
 
+    Route::put('/{id}', [ProfileController::class, 'update_avatar'])->name('update_avatar');
+
     Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
 });

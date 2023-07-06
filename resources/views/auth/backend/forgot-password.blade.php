@@ -5,10 +5,6 @@
 @section('content')
     <div class="card-body p-sm-5 m-sm-3 flex-grow-0">
         <h1 class="mb-0 fs-3">{{ __('Forgot password?') }}</h1>
-        <div class="fs-exact-14 text-muted mt-2 pt-1 mb-5 pb-2">
-            {{ __('Enter the email address associated with your account and we will send a link to reset your password.') }}
-        </div>
-
         @if (session('status'))
             <div class="alert alert-success alert-sa-has-icon mt-4 mb-4" role="alert">
                 <div class="alert-sa-icon">
@@ -25,7 +21,9 @@
                 </div>
             </div>
         @endif
-
+        <div class="fs-exact-14 text-muted mt-2 pt-1 mb-5 pb-2">
+            {{ __('Enter the email address associated with your account and we will send a link to reset your password.') }}
+        </div>
         <form method="POST" action="{{ route('admin.password.email') }}" class="needs-validation" novalidate="">
             @csrf
 

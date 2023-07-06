@@ -5,8 +5,6 @@
 @section('content')
     <div class="card-body p-sm-5 m-sm-3 flex-grow-0">
         <h1 class="mb-0 fs-3">{{ __('Sign In') }}</h1>
-        <div class="fs-exact-14 text-muted mt-2 pt-1 mb-5 pb-2">{{ __('Log in to your account to continue.') }}</div>
-
         @if (session('status'))
             <div class="alert alert-success alert-sa-has-icon mt-4 mb-4" role="alert">
                 <div class="alert-sa-icon">
@@ -22,7 +20,7 @@
                 </div>
             </div>
         @endif
-
+        <div class="fs-exact-14 text-muted mt-2 pt-1 mb-5 pb-2">{{ __('Log in to your account to continue.') }}</div>
         <form method="POST" action="{{ route('admin.login') }}" class="needs-validation" novalidate="">
             @csrf
 

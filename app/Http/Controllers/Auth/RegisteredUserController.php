@@ -28,10 +28,6 @@ class RegisteredUserController extends Controller
             'password' => ['required', Rules\Password::defaults()],
         ];
 
-        if ($table === 'users') {
-            $rules['accept_terms'] = ['required'];
-        }
-
         return $rules;
     }
 
@@ -39,7 +35,7 @@ class RegisteredUserController extends Controller
      * Redirect to the login route for admin or,
      * display the registration view.
      */
-    public function create(): View | RedirectResponse
+    public function create(): View|RedirectResponse
     {
         if (!isAdminRoute()) {
             return view("auth.frontend.register");
@@ -81,7 +77,6 @@ class RegisteredUserController extends Controller
         } else {
             $user = User::create([
                 ...$validated,
-                'accept_terms' => true,
                 'password' => Hash::make($request->password),
             ]);
         }

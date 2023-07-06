@@ -45,7 +45,7 @@
                             </div>
                             <div class="sa-search__help-subtitle">
                                 {{ __('Make sure that all words are spelled
-                                                                                                                                                                                                                                                                                                                                                                correctly.') }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                correctly.') }}
                             </div>
                         </div>
                         <div class="sa-search__help sa-search__help--type--greeting">
@@ -237,7 +237,8 @@
             <button class="sa-toolbar-user" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
                 data-bs-offset="0,1" aria-expanded="false">
                 <span class="sa-toolbar-user__avatar sa-symbol sa-symbol--shape--rounded">
-                    {!! Avatar::create($user->name)->toSvg() !!}
+                    <img src="{{ $user->avatar ? asset('uploads/backend') . '/' . $user->avatar : Avatar::create($user->email)->toGravatar() }}"
+                        alt="{{ $user->name }}" width="50" height="50" />
                 </span>
                 <span class="sa-toolbar-user__info">
                     <span class="sa-toolbar-user__title">{{ __($user->name) }}</span>

@@ -4,9 +4,9 @@
     </div>
     <div class="card-body">
 
-        <form method="POST" action="{{ route('dashboard.profile.update') }}" class="needs-validation" novalidate="">
+        <form method="POST" action="{{ route('admin.password.update') }}" class="needs-validation" novalidate="">
             @csrf
-            @method('patch')
+            @method('put')
 
 
             <div class="row g-4 mb-4">

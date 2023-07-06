@@ -17,75 +17,23 @@
         </ol>
     </nav>
     <section class="user-profile">
-        {{-- Update Info. Alert --}}
-        @if (session('status') === 'profile-updated')
-            <div class="alert alert-success alert-sa-has-icon alert-dismissible-aminate my-2 fade show" role="alert">
-                <div class="alert-sa-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="feather feather-check-circle">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
-                </div>
-                <div class="alert-sa-content">
-                    {{ __('The pasword has been updated!') }}
-                </div>
-                <button type="button" class="sa-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        {{-- Account Deletion Alert --}}
-        @if ($errors->accountDelition->has('delete_password'))
-            <div class="alert alert-danger alert-sa-has-icon alert-dismissible-aminate my-2 fade show" role="alert">
-                <div class="alert-sa-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="feather feather-info">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="16" x2="12" y2="12"></line>
-                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                    </svg>
-                </div>
-                <div class="alert-sa-content">
-                    {{ __($errors->accountDelition->first('delete_password')) }}
-                </div>
-                <button type="button" class="sa-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        {{-- Verification Email Send Alert --}}
-        @if (session('status') === 'verification-link-sent')
-            <div class="alert alert-success alert-sa-has-icon alert-dismissible-aminate my-2 fade show" role="alert">
-                <div class="alert-sa-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="feather feather-check-circle">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
-                </div>
-                <div class="alert-sa-content">
-
-                    {{ __('A new verification link has been sent to your email address.') }}
-                </div>
-                <button type="button" class="sa-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+        {{-- Profile Toasts --}}
+        @include('frontend.pages.profile.inc.profile-toasts')
+        {{-- Profile Toasts --}}
 
         <div class="row g-2 gy-lg-0">
             <div class="col-lg-4">
                 <div class="card rounded-0 border">
                     <div class="card-body">
                         <div class="profile-avatar">
-                            <label for="avatar" class="avatar">
-                                <input type="file" name="avatar" id="avatar" hidden>
-                                {!! Avatar::create($user->name)->toSvg() !!}
-                                <div class="overlay">
-                                    <i class="fal fa-camera"></i>
-                                </div>
-                            </label>
-                            <h2 class="h6 fw-medium">{{ __($user->name) }}</h2>
+                            <img src="{{ $user->avatar ? asset('uploads/frontend') . '/' . $user->avatar : Avatar::create($user->email)->toGravatar() }}"
+                                alt="{{ $user->name }}" id="avatarToShow" width="100" height="100" />
+                        </div>
+
+                        <h6 class="text-center">{{ $user->name }}</h6>
+                        <div class="text-center mb-4">
+                            <a href="mailto:{{ $user->email }}"
+                                class="link-dark text-decoration-none">{{ $user->email }}</a>
                         </div>
 
                         <ul class="nav nav-tabs-column nav-pills nav-fill">
@@ -112,6 +60,8 @@
             <div class="col-lg-8">
                 {{-- Profile info --}}
                 @include('frontend.pages.profile.inc.update-profile-info')
+                {{-- Profile image --}}
+                @include('frontend.pages.profile.inc.update-avatar')
                 {{-- Update password --}}
                 @include('frontend.pages.profile.inc.update-password')
                 {{-- Delete account --}}
@@ -119,4 +69,23 @@
             </div>
         </div>
     </section>
+
+    {{-- File Upload Script Start --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const avatarInput = document.getElementById('avatar');
+            const avatarImg = document.getElementById('avatarToShow');
+
+            avatarInput.addEventListener('change', (inputEvent) => {
+                const fileReader = new FileReader();
+
+                fileReader.addEventListener('load', (fileReaderEvent) => {
+                    avatarImg.setAttribute('src', fileReaderEvent.target.result);
+                })
+
+                fileReader.readAsDataURL(inputEvent.target.files['0']);
+            })
+        })
+    </script>
+    {{-- File Upload Script Start --}}
 @endsection

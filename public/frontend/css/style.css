@@ -2892,39 +2892,22 @@ ul.compare-gallery li a .vs {
 }
 
 .profile-avatar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+    width: 6rem;
+    height: 6rem;
     margin-bottom: 1rem;
-}
-
-.profile-avatar .avatar {
-    cursor: pointer;
-    position: relative;
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: start;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50rem;
     overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.avatar .overlay {
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    transition: 300ms;
-    opacity: 0;
-}
-
-.avatar:hover .overlay {
-    opacity: 1;
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: inherit;
 }
 
 .dropdown-menu {

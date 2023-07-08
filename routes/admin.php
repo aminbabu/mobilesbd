@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Backend\DashboardController;
-use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,10 +28,10 @@ if (!function_exists('dashboard_users')) {
     {
         Route::middleware(['admin'])->prefix('users')->name('user.')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
-            Route::get('/add', [UserController::class, 'create'])->name('create');
-            Route::post('/add', [UserController::class, 'store'])->name('store');
+            Route::get('/create', [UserController::class, 'create'])->name('create');
+            Route::post('/create', [UserController::class, 'store'])->name('store');
             Route::get('/user/{id}', [UserController::class, 'show'])->name('profile');
-            Route::get('/{id}', [UserController::class, 'edit'])->name('edit');
+            Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
             Route::patch('/{id}', [UserController::class, 'update'])->name('update');
             Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
         });

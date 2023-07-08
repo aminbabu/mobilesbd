@@ -17,7 +17,7 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-        $role = getRole('author');
+        $role = getUserRole('author');
 
         Admin::factory()->count(34)->create([
             'role_id' => $role->id,

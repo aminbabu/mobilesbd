@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $role = getRole('user');
+        $role = getUserRole('user');
 
         User::factory()->count(5)->create([
             'role_id' => $role->id,

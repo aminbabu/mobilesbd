@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Role;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -41,9 +42,9 @@ class RegisteredUserController extends Controller
             return view("auth.frontend.register");
         }
 
-        $hasAdminAlready = Admin::where('role', 'admin')->first();
+        $admins = getAdmins();
 
-        if ($hasAdminAlready) {
+        if ($admins) {
             return redirect()->route('admin.login');
         }
 
@@ -67,16 +68,19 @@ class RegisteredUserController extends Controller
         }
 
         $validated = $request->validate($rules);
+        $admin_role_id = Role::where('name', 'admin')->first();
+        $user_role = Role::where('name', 'user')->first();
 
         if ($isAdmin) {
             $user = Admin::create([
                 ...$validated,
-                'role' => 'admin',
+                'role_id' => $admin_role_id->id,
                 'password' => Hash::make($request->password),
             ]);
         } else {
             $user = User::create([
                 ...$validated,
+                'role_id' => $user_role->id,
                 'password' => Hash::make($request->password),
             ]);
         }

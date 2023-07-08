@@ -29,9 +29,11 @@
             </div>
         @endif
 
+        {{-- Send Verification Mail --}}
         <form id="sendVerification" method="post" action="{{ route('admin.verification.send') }}">
             @csrf
         </form>
+        {{-- Send Verification Mail --}}
 
         <form method="POST" action="{{ route('dashboard.profile.update') }}" class="needs-validation" novalidate="">
             @csrf
@@ -52,7 +54,7 @@
                 <label for="email" class="form-label">{{ __('Email Address') }}</label>
                 <input type="email" name="email" id="email"
                     class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $user->email) }}"
-                    @unless($user->email_verified_at) disabled @endunless required />
+                    @unless ($user->email_verified_at) disabled @endunless required />
                 @error('email')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror

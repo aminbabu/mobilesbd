@@ -17,9 +17,9 @@ class EmailVerificationPromptController extends Controller
     {
         $role = $request->user()->role;
 
-        $guard = $role === 'subscriber' ? 'frontend' : 'backend';
+        $guard = $role === 'user' ? 'frontend' : 'backend';
 
-        $home = $role === 'subscriber' ? RouteServiceProvider::HOME : RouteServiceProvider::Dashboard;
+        $home = $role === 'user' ? RouteServiceProvider::HOME : RouteServiceProvider::Dashboard;
 
         return $request->user()->hasVerifiedEmail()
             ? redirect()->intended($home)

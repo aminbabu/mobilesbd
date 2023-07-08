@@ -11,6 +11,8 @@
 |
 */
 
+require __DIR__ . '/breadcrumbs.php';
+
 require __DIR__ . '/common.php';
 
 require __DIR__ . '/admin.php';

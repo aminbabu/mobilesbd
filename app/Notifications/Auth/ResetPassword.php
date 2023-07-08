@@ -24,7 +24,7 @@ class ResetPassword extends NotificationsResetPassword
             return call_user_func(static::$createUrlCallback, $notifiable, $this->token);
         }
 
-        $guard = $notifiable->role === 'subscriber' ? '' : 'admin.';
+        $guard = $notifiable->role === 'user' ? '' : 'admin.';
 
         return url(route("{$guard}password.reset", [
             'token' => $this->token,

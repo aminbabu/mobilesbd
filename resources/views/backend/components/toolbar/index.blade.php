@@ -236,13 +236,13 @@
         <div class="dropdown sa-toolbar__item">
             <button class="sa-toolbar-user" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
                 data-bs-offset="0,1" aria-expanded="false">
-                <span class="sa-toolbar-user__avatar sa-symbol sa-symbol--shape--rounded">
-                    <img src="{{ $user->avatar ? asset('uploads/backend') . '/' . $user->avatar : Avatar::create($user->email)->toGravatar() }}"
-                        alt="{{ $user->name }}" width="50" height="50" />
+                <span class="sa-toolbar-user__avatar sa-symbol sa-symbol--shape--rounded overflow-hidden">
+                    <img src="{{ Auth::user()->avatar ? asset('uploads/backend') . '/' . Auth::user()->avatar : Avatar::create(Auth::user()->email)->toGravatar() }}"
+                        alt="{{ Auth::user()->name }}" width="50" height="50" />
                 </span>
                 <span class="sa-toolbar-user__info">
-                    <span class="sa-toolbar-user__title">{{ __($user->name) }}</span>
-                    <span class="sa-toolbar-user__subtitle">{{ __($user->email) }}</span>
+                    <span class="sa-toolbar-user__title">{{ Auth::user()->name }}</span>
+                    <span class="sa-toolbar-user__subtitle">{{ Auth::user()->email }}</span>
                 </span>
             </button>
             <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">

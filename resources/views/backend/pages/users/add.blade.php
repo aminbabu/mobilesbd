@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', __('Update existing user'))
+@section('title', __('Add New user'))
 
 @section('content')
     <div id="top" class="sa-app__body px-2 px-lg-4">
@@ -11,10 +11,10 @@
                         <nav class="mb-2" aria-label="breadcrumb">
                             <ol class="breadcrumb breadcrumb-sa-simple">
                                 <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">{{ $user->name }}</li>
+                                <li class="breadcrumb-item active" aria-current="page">Add user</li>
                             </ol>
                         </nav>
-                        <h1 class="h3 m-0">{{ __('Update user') }}</h1>
+                        <h1 class="h3 m-0">{{ __('New user') }}</h1>
                     </div>
                     <div class="col-auto d-flex">
                         <a href="{{ route('dashboard.user.index') }}" class="btn btn-primary">{{ __('User list') }}</a>
@@ -28,17 +28,16 @@
                 <div class="col-md-8 col-lg-6">
                     <div class="card">
                         <div class="card-body">
-                            <form method="POST" action="{{ route('dashboard.user.update', ['id' => $user->id]) }}"
-                                class="needs-validation" novalidate="">
+                            <form method="POST" action="{{ route('dashboard.user.store') }}" class="needs-validation"
+                                novalidate="">
                                 @csrf
-                                @method('patch')
 
                                 <div class="mb-5">
                                     {{-- Full Name --}}
                                     <label for="name" class="form-label">{{ __('Full name') }}</label>
                                     <input type="text" name="name" id="name"
                                         class="form-control @error('name') is-invalid @enderror" autofocus required
-                                        value="{{ old('name', $user->name) }}" />
+                                        value="{{ old('name') }}" />
                                     @error('name')
                                         <div class="invalid-feedback">{{ __($message) }}</div>
                                     @enderror
@@ -48,21 +47,19 @@
                                     <label for="email" class="form-label">{{ __('Email Address') }}</label>
                                     <input type="email" name="email" id="email"
                                         class="form-control @error('email') is-invalid @enderror" required
-                                        value="{{ old('email', $user->email) }}" />
+                                        value="{{ old('email') }}" />
                                     @error('email')
                                         <div class="invalid-feedback">{{ __($message) }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-5">
-                                    {{-- New password --}}
-                                    <div>
-                                        <label for="password" class="form-label">{{ __('New Password') }}</label>
-                                        <input type="password" name="password" id="password"
-                                            class="form-control @error('password') is-invalid @enderror" required />
-                                        @error('password')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                                    {{-- Password --}}
+                                    <label for="password" class="form-label">{{ __('Password') }}</label>
+                                    <input type="password" name="password" id="password"
+                                        class="form-control @error('password') is-invalid @enderror" required />
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ __($message) }}</div>
+                                    @enderror
                                 </div>
                                 <div class="mb-5">
                                     {{-- User Role --}}
@@ -70,9 +67,7 @@
                                     <select name="role_id" id="role_id"
                                         class="form-select @error('role_id') is-invalid @enderror" required>
                                         @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}"
-                                                @if ($user->role_id === $role->id) selected @endif>
-                                                {{ __(Str::ucfirst($role->name)) }}
+                                            <option value="{{ $role->id }}">{{ __(Str::ucfirst($role->name)) }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -84,7 +79,7 @@
                                     <div class="text-end">
                                         <a href="{{ url()->previous() }}" role="button"
                                             class="btn btn-secondary me-3">{{ __('Cancel') }}</a>
-                                        <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
+                                        <button type="submit" class="btn btn-primary">{{ __('Add User') }}</button>
                                     </div>
                                 </div>
                             </form>

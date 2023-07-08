@@ -18,7 +18,7 @@
     </nav>
     <section class="user-profile">
         {{-- Profile Toasts --}}
-        @include('frontend.pages.profile.inc.profile-toasts')
+        @include('partials.status-messages')
         {{-- Profile Toasts --}}
 
         <div class="row g-2 gy-lg-0">

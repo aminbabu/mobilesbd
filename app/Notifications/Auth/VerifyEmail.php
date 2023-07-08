@@ -27,7 +27,7 @@ class VerifyEmail extends NotificationsVerifyEmail
             return call_user_func(static::$createUrlCallback, $notifiable);
         }
 
-        $guard = $notifiable->role === 'subscriber' ? '' : 'admin.';
+        $guard = $notifiable->role === 'user' ? '' : 'admin.';
 
         return URL::temporarySignedRoute(
             "{$guard}verification.verify",

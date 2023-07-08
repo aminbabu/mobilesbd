@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Admin;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,11 +20,13 @@ class ProfileController extends Controller
      *
      * Display the user's profile form.
      */
-    public function edit(Request $request): View
+    public function edit(): View
     {
-        $view = $request->user()->role === 'subscriber' ? 'frontend' : 'backend';
+        $user = Auth::user();
+        $role = Role::find($user->role_id);
+        $view = $role->name === 'user' ? 'frontend' : 'backend';
 
-        return view("{$view}.pages.profile.edit", ['user' => $request->user()]);
+        return view("{$view}.pages.profile.edit", ['user' => $user, 'userRole' => $role->name]);
     }
 
     /**
@@ -39,7 +42,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        $guard = $request->user()->role === 'subscriber' ? '' : 'dashboard.';
+        $guard = $request->user()->role === 'user' ? '' : 'dashboard.';
 
         return Redirect::route("{$guard}profile.edit")->with('status', 'profile-updated');
     }
@@ -55,7 +58,7 @@ class ProfileController extends Controller
             ]
         ]);
 
-        if ($request->user()->role === 'subscriber') {
+        if ($request->user()->role === 'user') {
             $user = User::find($id);
             $filepath = 'uploads/frontend/';
         } else {
@@ -87,7 +90,7 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        $guard = $user->role === 'subscriber' ? 'web' : 'admin';
+        $guard = $user->role === 'user' ? 'web' : 'admin';
 
         $request->validateWithBag('accountDelition', [
             'delete_password' => [

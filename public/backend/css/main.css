@@ -31,3 +31,32 @@
     object-fit: cover;
     object-position: center;
 }
+
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-2 {
+    -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+    -webkit-line-clamp: 3;
+}
+
+.line-clamp-4 {
+    -webkit-line-clamp: 4;
+}
+
+.sa-brand-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sa-brand-logo img {
+    width: 2.5rem;
+}

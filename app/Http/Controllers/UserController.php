@@ -27,14 +27,14 @@ class UserController extends Controller
     }
 
     /**
-     * display new user adding form
+     * display new user add form
      *
      */
     public function create(Request $request): View
     {
         $roles = Role::whereNotIn('name', ['user'])->get();
 
-        return view('backend.pages.users.add', ['roles' => $roles]);
+        return view('backend.pages.users.create', ['roles' => $roles]);
     }
 
     /**
@@ -66,7 +66,7 @@ class UserController extends Controller
     {
         $user = Admin::find($id);
 
-        return view('backend.pages.users.profile', ['user' => $user]);
+        return view('backend.pages.users.show', ['user' => $user]);
     }
 
     /**

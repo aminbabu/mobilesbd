@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Users')
+@section('title', 'Brands')
 
 @section('content')
     <div id="top" class="sa-app__body">
@@ -17,8 +17,8 @@
                             </nav>
                             <h1 class="h3 m-0">Users</h1>
                         </div>
-                        <div class="col-auto d-flex"><a href="{{ route('dashboard.user.create') }}"
-                                class="btn btn-primary">{{ __('Add user') }}</a>
+                        <div class="col-auto d-flex"><a href="{{ route('dashboard.brand.create') }}"
+                                class="btn btn-primary">{{ __('Add brand') }}</a>
                         </div>
                     </div>
                     {{-- Profile Toasts --}}
@@ -32,12 +32,6 @@
                     </div>
                     <div class="sa-divider"></div>
 
-                    {{-- Send Verification Mail --}}
-                    <form id="sendVerification" method="post" action="{{ route('admin.verification.send') }}">
-                        @csrf
-                    </form>
-                    {{-- Send Verification Mail --}}
-
                     <table class="sa-datatables-init" data-order='[[ 1, "asc" ]]' data-sa-search-input="#table-search">
                         <thead>
                             <tr>
@@ -45,54 +39,38 @@
                                     <input type="checkbox" class="form-check-input m-0 fs-exact-16 d-block"
                                         aria-label="..." />
                                 </th>
+                                <th>{{ __('Logo') }}</th>
                                 <th class="min-w-20x">{{ __('Name') }}</th>
+                                <th>{{ __('Description') }}</th>
                                 <th>{{ __('Registered') }}</th>
-                                <th>{{ __('Role') }}</th>
-                                <th>{{ __('Verification Status') }}</th>
                                 <th class="w-min" data-orderable="false"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($users as $user)
+                            @foreach ($brands as $brand)
                                 <tr>
-                                    <td><input type="checkbox" class="form-check-input m-0 fs-exact-16 d-block"
-                                            aria-label="..." /></td>
                                     <td>
-                                        <div class="d-flex align-items-center">
-                                            <a href="{{ route('dashboard.user.show', ['id' => $user->id]) }}"
-                                                class="me-4">
-                                                <div class="sa-symbol sa-symbol--shape--rounded sa-symbol--size--lg">
-                                                    <img src="{{ $user->avatar ? asset('uploads/backend') . '/' . $user->avatar : Avatar::create($user->email)->toGravatar() }}"
-                                                        alt="{{ $user->name }}" width="32" height="32" />
-                                                </div>
-                                            </a>
-                                            <div>
-                                                <a href="{{ route('dashboard.user.show', ['id' => $user->id]) }}"
-                                                    class="text-reset">{{ $user->name }}</a>
-                                                <div class="text-muted mt-n1">{{ $user->email }}</div>
-                                            </div>
-                                        </div>
+                                        <input type="checkbox" class="form-check-input m-0 fs-exact-16 d-block"
+                                            aria-label="..." />
                                     </td>
-                                    <td class="text-nowrap">{{ $user->created_at->format('j F, Y') }}</td>
-                                    <td>{{ Str::ucfirst(getUserRole($user->role_id)->name) }}</td>
                                     <td>
-                                        @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
-                                            <button type="button" class="btn btn-sm btn-secondary"
-                                                onclick="event.preventDefault();document.getElementById('sendVerification').submit();">
-                                                {{ __(' Verify Email') }}
-                                            </button>
-                                        @else
-                                            <div class="sa-icon">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                                    viewBox="0 0 24 24" fill="none" stroke="#00aa00" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round"
-                                                    class="feather feather-check-circle">
-                                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                                </svg>
+                                        <a href="{{ route('dashboard.brand.show', ['id' => $brand->id]) }}" class="me-4">
+                                            <div class="sa-brand-logo">
+                                                <img src="{{ $brand->logo ? asset('uploads/backend/brands') . '/' . $brand->logo : Avatar::create($brand->name)->toBase64() }}"
+                                                    alt="{{ $brand->name }}" width="32" height="32"
+                                                    class="img-fluid" />
                                             </div>
-                                        @endif
+                                        </a>
                                     </td>
+                                    <td>
+                                        <a
+                                            href="{{ route('dashboard.brand.show', ['id' => $brand->id]) }}"class="text-reset">{{ $brand->name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <div class="line-clamp">{{ $brand->description }}</div>
+                                    </td>
+                                    <td>{{ $brand->created_at->diffForHumans() }}</td>
                                     <td>
                                         <div class="dropdown">
                                             <button class="btn btn-sa-muted btn-sm" type="button"
@@ -108,12 +86,12 @@
                                             <ul class="dropdown-menu dropdown-menu-end"
                                                 aria-labelledby="customer-context-menu-0">
                                                 <li><a class="dropdown-item"
-                                                        href="{{ route('dashboard.user.edit', $user->id) }}">{{ __('Edit') }}</a>
+                                                        href="{{ route('dashboard.brand.edit', $brand->id) }}">{{ __('Edit') }}</a>
                                                 </li>
                                                 <li>
                                                     {{-- Delete user form --}}
                                                     <form id="" method="post"
-                                                        action="{{ route('dashboard.user.destroy', ['id' => $user->id]) }}"
+                                                        action="{{ route('dashboard.brand.destroy', ['id' => $brand->id]) }}"
                                                         class="needs-validation" novalidate="">
                                                         @csrf
                                                         @method('delete')

@@ -44,7 +44,7 @@ class ProfileController extends Controller
 
         $guard = $request->user()->role === 'user' ? '' : 'dashboard.';
 
-        return Redirect::route("{$guard}profile.edit")->with('status', 'profile-updated');
+        return Redirect::route("{$guard}profile.edit")->with('status', 'updated');
     }
 
     /**
@@ -60,10 +60,10 @@ class ProfileController extends Controller
 
         if ($request->user()->role === 'user') {
             $user = User::find($id);
-            $filepath = 'uploads/frontend/';
+            $filepath = 'uploads/backend/users';
         } else {
             $user = Admin::find($id);
-            $filepath = 'uploads/backend/';
+            $filepath = 'uploads/backend/users';
         }
 
         // remove old profile image (if exists)
@@ -80,7 +80,7 @@ class ProfileController extends Controller
         $user->avatar = $filename;
         $user->save();
 
-        return back()->with('status', 'avatar-updated');
+        return back()->with('status', 'updated');
     }
 
     /**

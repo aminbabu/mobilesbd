@@ -26,7 +26,7 @@
                 <div class="card rounded-0 border">
                     <div class="card-body">
                         <div class="profile-avatar">
-                            <img src="{{ $user->avatar ? asset('uploads/frontend') . '/' . $user->avatar : Avatar::create($user->email)->toGravatar() }}"
+                            <img src="{{ $user->avatar ? asset('uploads/frontend/users') . '/' . $user->avatar : Avatar::create($user->email)->toGravatar() }}"
                                 alt="{{ $user->name }}" id="avatarToShow" width="100" height="100" />
                         </div>
 

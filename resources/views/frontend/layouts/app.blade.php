@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/vendor/bootstrap/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('frontend/vendor/bootstrap-slider/css/bootstrap-slider.') }}min.css" />
     <link rel="stylesheet" href="{{ asset('frontend/vendor/slick/slick.css') }}" />
-    <link rel="stylesheet" href="{{ asset('frontend/vendor/jquery-nice-select/css/nice-select.css') }}" />
+    <link rel="stylesheet" href="{{ asset('frontend/vendor/nice-select2/css/nice-select2.css') }}" />
 
     <!-- Font Awesome 5 -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
@@ -51,7 +51,7 @@
     <script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('frontend/vendor/bootstrap-slider/bootstrap-slider.min.js') }}"></script>
     <script src="{{ asset('frontend/vendor/slick/slick.min.js') }}"></script>
-    <script src="{{ asset('frontend/vendor/jquery-nice-select/js/jquery.nice-select.min.js') }}"></script>
+    <script src="{{ asset('frontend/vendor/nice-select2/js/nice-select2.js') }}"></script>
     <script src="{{ asset('backend/js/demo.js') }}"></script>
 
     <!-- custom scripts -->

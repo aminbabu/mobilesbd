@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
@@ -99,6 +99,7 @@ class UserController extends Controller
         if ($request->user()->isDirty('email')) {
             $user()['email_verified_at'] = null;
         }
+
         $user['name'] = $validated['name'];
         $user['email'] = $validated['email'];
         $user['password'] = Hash::make($validated['password']);

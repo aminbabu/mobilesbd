@@ -1,28 +1,13 @@
 <?php
 
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ShowroomController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Backend\BrandController;
+use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\ShowroomController;
+use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Route;
 
-
-// Dashboard profile
-if (!function_exists('dashboard_profile')) {
-    function dashboard_profile()
-    {
-        Route::prefix('profile')->namespace('DashboardProfile')->name('profile.')->group(function () {
-            Route::get('/', [ProfileController::class, 'edit'])->name('edit');
-
-            Route::patch('/', [ProfileController::class, 'update'])->name('update');
-
-            Route::put('/{id}', [ProfileController::class, 'update_avatar'])->name('update_avatar');
-
-            Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
-        });
-    }
-}
+// import common routes
+require __DIR__ . '/common.php';
 
 // Dashboard users
 if (!function_exists('dashboard_users')) {
@@ -74,12 +59,12 @@ if (!function_exists('dashboard_showrooms')) {
 
 Route::middleware(['auth:admin'])->prefix('dashboard')->namespace('Dashboard')->name('dashboard.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
-    dashboard_profile();
+    profile_routes();
     dashboard_users();
     dashboard_brands();
     dashboard_showrooms();
 });
 
-Route::middleware('auth:admin')->name('admin.')->group(function () {
+Route::middleware('auth:admin')->name('dashboard.')->group(function () {
 
 });

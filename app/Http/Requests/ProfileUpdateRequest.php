@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use Illuminate\Validation\Rules\File;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules;
 
 class ProfileUpdateRequest extends FormRequest
 {
@@ -15,9 +17,26 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $table = 'users';
+
+        if (isDashboardRoute()) {
+            $table = 'admins';
+        }
+
         return [
             'name' => ['string', 'max:255'],
-            'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'username' => ['nullable', 'string', 'min:6', 'max:255', 'unique:' . $table],
+            'email' => ['email', 'max:255', 'unique:' . $table],
+            'password' => [Rules\Password::defaults()],
+            'avatar' => [File::image()->min(10)->max(512)->dimensions(Rule::dimensions()->maxWidth(512)->maxHeight(512))],
+            'phone' => ['phone', 'max:25'],
+            'phone_country' => ['nullable', 'string', 'max:25'],
+            'country' => ['nullable', 'string', 'max:255'],
+            'address_line_1' => ['nullable', 'string', 'max:255'],
+            'address_line_2' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'postcode' => ['nullable', 'string', 'max:25'],
+            'status' => ['nullable', 'string', 'max:25'],
         ];
     }
 }

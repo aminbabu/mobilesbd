@@ -17,10 +17,8 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $role = getUserRole('user');
+        $role = getUserRole(1);
 
-        User::factory()->count(5)->create([
-            'role_id' => $role->id,
-        ]);
+        User::factory()->count(5)->create();
     }
 }

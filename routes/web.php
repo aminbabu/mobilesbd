@@ -15,9 +15,17 @@ require __DIR__ . '/breadcrumbs.php';
 
 require __DIR__ . '/common.php';
 
-require __DIR__ . '/admin.php';
-
 require __DIR__ . '/user.php';
+
+require __DIR__ . '/contributor.php';
+
+require __DIR__ . '/author.php';
+
+require __DIR__ . '/editor.php';
+
+require __DIR__ . '/manager.php';
+
+require __DIR__ . '/admin.php';
 
 require __DIR__ . '/auth.php';
 

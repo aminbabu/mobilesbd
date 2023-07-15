@@ -2,9 +2,7 @@
 const MBD = {};
 
 // utility interactions
-MBD.interActions = function () {
-
-};
+MBD.interActions = function () {};
 
 // bootstrap range slider
 MBD.initBootstrapRangeSlider = function (selector, options = {}) {
@@ -186,22 +184,26 @@ MBD.header = function () {
         $(this).find(".fa-angle-right").toggleClass("active");
     });
 
-    $(".compare-trigger-btn").click(function () {
-        $(this).toggleClass("active");
+    $(".comparison-sidebar .offcanvas").on("show.bs.offcanvas", (event) => {
+        $(".compare-trigger-btn").addClass("active");
     });
 
-    $("#compare-sidebar .btn-close").click(function () {
-        if ($(".compare-trigger-btn").hasClass("active")) {
-            $(".compare-trigger-btn").removeClass("active");
-        }
+    $(".comparison-sidebar .offcanvas").on("hide.bs.offcanvas", (event) => {
+        $(".compare-trigger-btn").removeClass("active");
     });
 
     $(".sm-search-icon").click(function () {
         $(".search-box").fadeIn();
     });
 
-    $(".search-box .close-btn").click(function () {
-        $(".search-box").fadeOut();
+    $(".search-box, .search-box .close-btn").click(function (e) {
+        if (
+            ($(e.target).length && $(e.target)[0] === $(".search-box")[0]) ||
+            $(e.target).closest(".close-btn")[0] ===
+                $(".search-box .close-btn")[0]
+        ) {
+            $(e.target).closest(".search-box").fadeOut();
+        }
     });
 };
 
@@ -307,10 +309,16 @@ MBD.singleProduct = function () {
 };
 
 // nice select
-MBD.initNiceSelect = function () {
-    if (!$(".nice-select").length) return;
+MBD.initNiceSelect2 = function () {
+    const selectors = Array.from(
+        document.getElementsByClassName("nice-select")
+    );
 
-    $(".nice-select").niceSelect();
+    if (!selectors.length) return;
+
+    selectors.forEach((selector) => {
+        NiceSelect.bind(selector);
+    });
 };
 
 // doucment on load
@@ -323,7 +331,7 @@ window.addEventListener("DOMContentLoaded", function () {
     MBD.xGallery();
     MBD.dynamicVideos();
     MBD.singleProduct();
-    MBD.initNiceSelect();
+    MBD.initNiceSelect2();
     MBD.interActions();
 });
 

@@ -3,7 +3,8 @@
         <h2 class="mb-0 fs-exact-18 me-4">{{ __('Delete Account') }}</h2>
     </div>
     <div class="card-body">
-        <p>{{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
+        <p>{{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before
+            deleting your account, please download any data or information that you wish to retain.') }}
         </p>
 
         <div class="text-end">
@@ -18,15 +19,18 @@
                 <div class="modal-content">
                     <div class="modal-body">
 
-                        <form method="post" action="{{ route('dashboard.profile.destroy') }}" class="needs-validation"
-                            novalidate="">
+                        <form method="post"
+                            action="{{ route('dashboard.profile.destroy', ['role' => $user->role->name,'id' => $user->id]) }}"
+                            class="needs-validation" novalidate="">
                             @csrf
                             @method('delete')
 
                             <h2 class="h4 fw-semibold">
                                 {{ __('Are you sure you want to delete your account?') }}</h2>
                             <p>
-                                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
+                                {{ __('Once your account is deleted, all of its resources and data will be permanently
+                                deleted. Please enter your password to confirm you would like to permanently delete your
+                                account.') }}
                             </p>
 
                             {{-- Password --}}
@@ -37,8 +41,8 @@
                             </div>
 
                             <div class="text-end mt-5">
-                                <button type="button" class="btn btn-secondary ms-2"
-                                    data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                                <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">{{
+                                    __('Cancel') }}</button>
                                 <button type="submit" class="btn btn-outline-danger ms-2">
                                     {{ __('Delete Account') }}
                                 </button>

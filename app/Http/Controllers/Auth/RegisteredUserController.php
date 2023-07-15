@@ -42,10 +42,10 @@ class RegisteredUserController extends Controller
             return view("auth.frontend.register");
         }
 
-        $admins = getAdmins();
+        $hasAdmin = count(getAdmins()); // get admin users if there any
 
-        if ($admins) {
-            return redirect()->route('admin.login');
+        if ($hasAdmin) {
+            return redirect()->route('dashboard.login');
         }
 
         return view('auth.backend.register');

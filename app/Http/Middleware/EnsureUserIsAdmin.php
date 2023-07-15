@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EnsureUserIsAdmin
 {
@@ -17,12 +18,10 @@ class EnsureUserIsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        $role = getUserRole($request->user()->role_id);
-
-        if ($role->name != 'admin') {
-            return redirect(RouteServiceProvider::Dashboard);
+        if (Auth::user()->role->name === 'admin') {
+            return $next($request);
         }
 
-        return $next($request);
+        return redirect(RouteServiceProvider::Dashboard);
     }
 }

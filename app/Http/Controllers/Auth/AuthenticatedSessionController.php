@@ -17,7 +17,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View | RedirectResponse
+    public function create(): View|RedirectResponse
     {
         $guard = 'web';
         $layout = 'frontend';
@@ -47,7 +47,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        Auth::guard($guard  === 'admin' ? 'web' : 'admin')->logout();
+        Auth::guard($guard === 'admin' ? 'web' : 'admin')->logout();
 
         return redirect()->intended($layout);
     }
@@ -57,7 +57,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $guard = isAdminRoute() ? 'admin' : 'web';
+        $guard = 'admin';
+
+        if (Auth::user()->role->name === 'user') {
+            $guard = 'web';
+        }
 
         Auth::guard($guard)->logout();
 

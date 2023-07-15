@@ -33,7 +33,7 @@ class NewPasswordController extends Controller
     {
         $table = isAdminRoute() ? 'admins' : 'users';
 
-        $guard = $table === 'admins' ? 'admin.' : '';
+        $guard = $table === 'admins' ? 'dashboard.' : '';
 
         $request->validate($this->getValidationRoules($table));
 
@@ -58,7 +58,7 @@ class NewPasswordController extends Controller
         return $status == Password::PASSWORD_RESET
             ? redirect()->route("{$guard}login")->with('status', __($status))
             : back()->withInput($request->only('email'))
-            ->withErrors(['email' => __($status)]);
+                ->withErrors(['email' => __($status)]);
     }
 
     /**

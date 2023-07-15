@@ -26,7 +26,7 @@ class AdminVerified
         ) {
             return $request->expectsJson()
                 ? abort(403, 'Your email address is not verified.')
-                : Redirect::guest(URL::route($redirectToRoute ?: 'admin.verification.notice'));
+                : Redirect::guest(URL::route($redirectToRoute ?: 'dashboard.verification.notice'));
         }
 
         return $next($request);

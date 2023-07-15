@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
@@ -15,8 +15,6 @@ class DashboardController extends Controller
      */
     public function index(Request $request): View
     {
-        $role = Role::find($request->user()->role_id);
-
-        return view('backend.index', ['user' => $request->user(), 'userRole' => $role->name]);
+        return view('backend.index', ['user' => $request->user()]);
     }
 }

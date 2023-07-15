@@ -4,93 +4,143 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Admin;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
-use Illuminate\Validation\Rules\File;
 
 class ProfileController extends Controller
 {
     /**
+     * local variables
+     *
+     */
+    private $user;
+    private $view;
+    private $filepath;
+
+    private function initLocalVariables($role, $id)
+    {
+        if ($role === 'user') {
+            $this->user = User::find($id);
+            $this->view = 'frontend';
+            $this->filepath = 'uploads/frontend/users/';
+
+        } else {
+            $this->user = Admin::find($id);
+            $this->view = 'backend';
+            $this->filepath = 'uploads/backend/users/';
+        }
+    }
+
+    /**
      *
      * Display the user's profile form.
      */
-    public function edit(): View
+    public function edit($role, $id): View
     {
-        $user = Auth::user();
-        $role = Role::find($user->role_id);
-        $view = $role->name === 'user' ? 'frontend' : 'backend';
+        $this->initLocalVariables($role, $id);
 
-        return view("{$view}.pages.profile.edit", ['user' => $user, 'userRole' => $role->name]);
+        return view("{$this->view}.pages.profile.edit", ['user' => $this->user]);
     }
 
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request, $role, $id): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $this->initLocalVariables($role, $id);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $this->user->fill($request->validated());
+
+
+        if ($this->user->isDirty('email')) {
+            $this->user->email_verified_at = null;
         }
 
-        $request->user()->save();
 
-        $guard = $request->user()->role === 'user' ? '' : 'dashboard.';
+        $this->user->save();
 
-        return Redirect::route("{$guard}profile.edit")->with('status', 'updated');
+        return back()->with('status', 'profile-updated');
     }
 
     /**
-     * Update the user's profile image.
+     *
+     * Display the user's profile details form.
      */
-    public function update_avatar(Request $request, $id): RedirectResponse
+    public function edit_details($role, $id): View
     {
-        $request->validate([
-            'avatar' => [
-                'required', File::image()->min(10)->max(512)->dimensions(Rule::dimensions()->maxWidth(512)->maxHeight(512)),
-            ]
-        ]);
+        $this->initLocalVariables($role, $id);
 
-        if ($request->user()->role === 'user') {
-            $user = User::find($id);
-            $filepath = 'uploads/backend/users';
-        } else {
-            $user = Admin::find($id);
-            $filepath = 'uploads/backend/users';
+        return view("{$this->view}.pages.profile.edit-details", ['user' => $this->user]);
+    }
+
+    /**
+     * Update the user's profile details.
+     */
+    public function details(ProfileUpdateRequest $request, $role, $id): RedirectResponse
+    {
+        $this->initLocalVariables($role, $id);
+
+        $validated = $request->validated();
+        $filename = null;
+
+        if ($this->user->username) {
+            return back()->with('status', 'username-exists');
         }
 
-        // remove old profile image (if exists)
-        if ($user->avatar != '' && $user->avatar != null) {
-            unlink($filepath . $user->avatar);
+        if ($request->file('avatar')) {
+
+            // remove old profile image (if exists)
+            if ($this->user->avatar != '' && $this->user->avatar != null) {
+                unlink($this->filepath . $this->user->avatar);
+            }
+
+            // prepare new profile image
+            $avatar = $request->file('avatar');
+            $filename = date('YmdHi') . $avatar->getClientOriginalName();
+            $avatar->move(public_path($this->filepath), $filename);
         }
 
-        // prepare new profile image
-        $avatar = $request->file('avatar');
-        $filename = date('YmdHi') . $avatar->getClientOriginalName();
-        $avatar->move(public_path($filepath), $filename);
+        $this->user->fill($validated);
+        $this->user->avatar = $filename;
+        $this->user->save();
 
-        // update profile image
-        $user->avatar = $filename;
-        $user->save();
+        return back()->with('status', 'profile-updated');
+    }
 
-        return back()->with('status', 'updated');
+    /**
+     *
+     * Display the user's change password form.
+     */
+    public function edit_password($role, $id): View
+    {
+        $this->initLocalVariables($role, $id);
+
+        return view("{$this->view}.pages.profile.edit-password", ['user' => $this->user]);
+    }
+
+    /**
+     *
+     * Display the user's profile deletion form.
+     */
+    public function edit_destroy($role, $id): View
+    {
+        $this->initLocalVariables($role, $id);
+
+        return view("{$this->view}.pages.profile.edit-deletion", ['user' => $this->user]);
     }
 
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request, $role, $id): RedirectResponse
     {
-        $user = $request->user();
+        $this->initLocalVariables($role, $id);
 
-        $guard = $user->role === 'user' ? 'web' : 'admin';
+        $guard = $this->user->role->name === 'user' ? 'web' : 'admin';
 
         $request->validateWithBag('accountDelition', [
             'delete_password' => [
@@ -104,7 +154,7 @@ class ProfileController extends Controller
 
         Auth::guard($guard)->logout();
 
-        $user->delete();
+        $this->user->delete();
 
         $request->session()->invalidate();
 

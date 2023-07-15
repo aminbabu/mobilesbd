@@ -3,8 +3,7 @@
     <div class="sa-toolbar__body">
         <div class="sa-toolbar__item">
             <button class="sa-toolbar__button" type="button" aria-label="Menu" data-sa-toggle-sidebar="">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
-                    fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M1,11V9h18v2H1z M1,3h18v2H1V3z M15,17H1v-2h14V17z"></path>
                 </svg>
             </button>
@@ -45,7 +44,7 @@
                             </div>
                             <div class="sa-search__help-subtitle">
                                 {{ __('Make sure that all words are spelled
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                correctly.') }}
+                                correctly.') }}
                             </div>
                         </div>
                         <div class="sa-search__help sa-search__help--type--greeting">
@@ -228,8 +227,8 @@
                             </a>
                         </li>
                     </ul>
-                    <div class="sa-notifications__footer"><a class="sa-notifications__footer-action"
-                            href="">{{ __('See all 15 notifications') }}</a></div>
+                    <div class="sa-notifications__footer"><a class="sa-notifications__footer-action" href="">{{ __('See
+                            all 15 notifications') }}</a></div>
                 </div>
             </div>
         </div>
@@ -237,7 +236,7 @@
             <button class="sa-toolbar-user" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
                 data-bs-offset="0,1" aria-expanded="false">
                 <span class="sa-toolbar-user__avatar sa-symbol sa-symbol--shape--rounded overflow-hidden">
-                    <img src="{{ Auth::user()->avatar ? asset('uploads/backend') . '/' . Auth::user()->avatar : Avatar::create(Auth::user()->email)->toGravatar() }}"
+                    <img src="{{ Auth::user()->avatar ? asset('uploads/backend/users') . '/' . Auth::user()->avatar : Avatar::create(Auth::user()->email)->toGravatar() }}"
                         alt="{{ Auth::user()->name }}" width="50" height="50" />
                 </span>
                 <span class="sa-toolbar-user__info">
@@ -246,7 +245,11 @@
                 </span>
             </button>
             <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="{{ route('dashboard.profile.edit') }}">{{ __('Profile') }}</a>
+                <li>
+                    <a class="dropdown-item"
+                        href="{{ route('dashboard.profile.edit', ['role' => Auth::user()->role->name, 'id' => Auth::user()->id]) }}">
+                        {{__('Profile') }}
+                    </a>
                 </li>
                 <li><a class="dropdown-item" href="app-inbox-list.html">{{ __('Inbox') }}</a></li>
                 <li><a class="dropdown-item" href="app-settings-toc.html">{{ __('Settings') }}</a></li>

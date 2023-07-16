@@ -59,20 +59,20 @@ if (!function_exists('extracted_auth_routes')) {
 if (!function_exists('profile_routes')) {
     function profile_routes()
     {
-        Route::prefix('profile')->name('profile.')->group(function () {
-            Route::get('/{role}/{id}/edit', [ProfileController::class, 'edit'])->name('edit');
+        Route::prefix('{role}')->name('profile.')->group(function () {
+            Route::get('/{id}/edit', [ProfileController::class, 'edit'])->name('edit');
 
-            Route::get('/{role}/{id}/edit/details', [ProfileController::class, 'edit_details'])->name('edit_details');
+            Route::get('/{id}/edit/details', [ProfileController::class, 'edit_details'])->name('edit_details');
 
-            Route::get('/{role}/{id}/edit/password', [ProfileController::class, 'edit_password'])->name('edit_password');
+            Route::get('/{id}/edit/password', [ProfileController::class, 'edit_password'])->name('edit_password');
 
-            Route::get('/{role}/{id}/delete', [ProfileController::class, 'edit_destroy'])->name('edit_destroy');
+            Route::get('/{id}/delete', [ProfileController::class, 'edit_destroy'])->name('edit_destroy');
 
-            Route::patch('/{role}/{id}', [ProfileController::class, 'update'])->name('update');
+            Route::patch('/{id}', [ProfileController::class, 'update'])->name('update');
 
-            Route::put('/{role}/{id}', [ProfileController::class, 'details'])->name('details');
+            Route::put('/{id}', [ProfileController::class, 'details'])->name('details');
 
-            Route::delete('/{role}/{id}', [ProfileController::class, 'destroy'])->name('destroy');
+            Route::delete('/{id}', [ProfileController::class, 'destroy'])->name('destroy');
         });
     }
 }

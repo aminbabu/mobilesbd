@@ -2876,9 +2876,12 @@ ul.compare-gallery li a .vs {
     width: 100%;
 }
 
+.find-mobile-select {
+    margin-bottom: 1rem;
+}
+
 .find-mobile-select .nice-select {
     background-color: #f1f1f1;
-    margin-bottom: 1rem;
     font-size: 1rem;
 }
 

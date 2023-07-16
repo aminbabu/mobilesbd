@@ -14,8 +14,8 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 
 
 // repeated guest routes
-if (!function_exists('extracted_uest_routes')) {
-    function extracted_uest_routes(): void
+if (!function_exists('extracted_guest_routes')) {
+    function extracted_guest_routes(): void
     {
         Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
 

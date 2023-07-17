@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
 use App\Models\Showroom;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

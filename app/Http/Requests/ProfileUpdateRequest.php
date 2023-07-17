@@ -47,6 +47,7 @@ class ProfileUpdateRequest extends FormRequest
             'city' => ['nullable', 'string', 'max:255'],
             'postcode' => ['nullable', 'string', 'max:25'],
             'status' => ['nullable', 'string', 'max:25'],
+            'role_id' => ['string'],
         ];
     }
 }

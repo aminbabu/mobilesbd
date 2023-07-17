@@ -59,14 +59,15 @@
                                     aria-label="..." /></td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <a href="{{ route('dashboard.user.show', ['id' => $user->id]) }}" class="me-4">
+                                    <a href="{{ route('dashboard.profile.edit', ['role' => $user->role->name, 'id' => $user->id]) }}"
+                                        class="me-4">
                                         <div class="sa-symbol sa-symbol--shape--rounded sa-symbol--size--lg">
-                                            <img src="{{ $user->avatar ? asset('uploads/backend') . '/' . $user->avatar : Avatar::create($user->email)->toGravatar() }}"
+                                            <img src="{{ $user->avatar ? asset('uploads/backend/users') . '/' . $user->avatar : Avatar::create($user->email)->toGravatar() }}"
                                                 alt="{{ $user->name }}" width="32" height="32" />
                                         </div>
                                     </a>
                                     <div>
-                                        <a href="{{ route('dashboard.user.show', ['id' => $user->id]) }}"
+                                        <a href="{{ route('dashboard.profile.edit', ['role' => $user->role->name, 'id' => $user->id]) }}"
                                             class="text-reset">{{ $user->name }}</a>
                                         <div class="text-muted mt-n1">{{ $user->email }}</div>
                                     </div>
@@ -106,20 +107,16 @@
                                     <ul class="dropdown-menu dropdown-menu-end"
                                         aria-labelledby="customer-context-menu-0">
                                         <li><a class="dropdown-item"
-                                                href="{{ route('dashboard.user.edit', $user->id) }}">{{ __('Edit')
+                                                href="{{ route('dashboard.profile.edit', ['role' => $user->role->name, 'id' => $user->id]) }}">{{
+                                                __('Edit')
                                                 }}</a>
                                         </li>
                                         <li>
-                                            {{-- Delete user form --}}
-                                            <form id="" method="post"
-                                                action="{{ route('dashboard.user.destroy', ['id' => $user->id]) }}"
-                                                class="needs-validation" novalidate="">
-                                                @csrf
-                                                @method('delete')
-                                                <button type="submit" class="dropdown-item text-danger">{{ __('Delete')
-                                                    }}</button>
-                                            </form>
-                                            {{-- Delete user form --}}
+                                            <button type="button" class="dropdown-item text-danger modal-trigger"
+                                                data-user-role="{{ $user->role->name }}" data-user-id="{{ $user->id }}"
+                                                data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                                                {{ __('Delete Account') }}
+                                            </button>
                                         </li>
                                     </ul>
                                 </div>
@@ -132,4 +129,62 @@
         </div>
     </div>
 </div>
+
+{{-- Delete Account Modal --}}
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="deleteAccountModal" tabindex="-1"
+    aria-labelledby="deleteAccountModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="post"
+                    action="{{ route('dashboard.profile.destroy', ['role' => $user->role->name, 'id' => $user->id]) }}"
+                    class="needs-validation" novalidate="">
+                    @csrf
+                    @method('delete')
+
+                    <h2 class="h4 fw-semibold">
+                        {{ __('Are you sure you want to delete your
+                        account?') }}</h2>
+                    <p>
+                        {{ __('Once the account is deleted, all of its
+                        resources and data will be permanently
+                        deleted. Please enter your password to confirm you
+                        would like to permanently delete your
+                        account.') }}
+                    </p>
+
+                    {{-- Password --}}
+                    <div class="mb-3">
+                        <label for="delete_password" class="form-label">{{
+                            __('Confirm Password') }}</label>
+                        <input type="password" name="delete_password" id="delete_password"
+                            class="form-control  @error('email') is-invalid @enderror" required />
+                    </div>
+
+                    <div class="text-end mt-5">
+                        <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">{{
+                            __('Cancel') }}</button>
+                        <button type="submit" class="btn btn-outline-danger ms-2">
+                            {{ __('Delete Account') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const triggers = Array.from(document.getElementsByClassName('modal-trigger'));
+    const ModalEl = document.getElementById('deleteAccountModal');
+
+    triggers.forEach((trigger) => {
+        trigger.addEventListener('click', function () {
+            userRole = this.dataset.userRole || this.getAttribute('data-user-role');
+            userId = this.dataset.userId || this.getAttribute('data-user-id');
+
+            ModalEl.querySelector('form').setAttribute('action', `http://mobilesbd.test/dashboard/${userRole}/${userId}`);
+        });
+    });
+</script>
 @endsection

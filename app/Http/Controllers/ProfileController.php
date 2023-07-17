@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Admin;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,8 +43,9 @@ class ProfileController extends Controller
     public function edit($role, $id): View
     {
         $this->initLocalVariables($role, $id);
+        $roles = Role::whereNotIn('name', ['user'])->get();
 
-        return view("{$this->view}.pages.profile.edit", ['user' => $this->user]);
+        return view("{$this->view}.pages.profile.edit", ['user' => $this->user, 'roles' => $roles]);
     }
 
     /**
@@ -60,7 +62,6 @@ class ProfileController extends Controller
         if ($this->user->isDirty('email')) {
             $this->user->email_verified_at = null;
         }
-
 
         $this->user->save();
 
@@ -84,8 +85,9 @@ class ProfileController extends Controller
     public function details(Request $request, $role, $id): RedirectResponse
     {
         $this->initLocalVariables($role, $id);
+        $profileUpdateRequest = new ProfileUpdateRequest($this->user);
 
-        $validated = $request->validated();
+        $validated = $request->validate($profileUpdateRequest->rules());
         $filename = null;
 
         if ($this->user->username) {
@@ -152,6 +154,12 @@ class ProfileController extends Controller
                 'delete_password.current_password' => 'The :attribute confirmation does not match.',
             ]
         ]);
+
+        if (Auth::user()->id !== $this->user->id) {
+            $this->user->delete();
+
+            return redirect()->route('dashboard.user.index')->with('status', 'profile-deleted');
+        }
 
         Auth::guard($guard)->logout();
 

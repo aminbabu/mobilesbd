@@ -76,6 +76,23 @@
                 </div>
             </div>
 
+            {{-- User Role --}}
+            @if (Auth::user()->role->name === 'admin')
+            <div class="mb-4">
+                <label for="role_id" class="form-label">{{ __('User Role') }}</label>
+                <select name="role_id" class="form-select text-capitalize @error('role_id') is-invalid @enderror">
+                    @foreach ($roles as $role)
+                    <option value="{{ $role->id }}" @selected(old('role_id', $user->role_id) === $role->id)>
+                        {{ $role->name }}
+                    </option>
+                    @endforeach
+                </select>
+                @error('role_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            @endif
+
             <div class="text-end">
                 <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
             </div>

@@ -18,12 +18,11 @@
                         <h1 class="h3 m-0">{{ $user->name }}</h1>
                     </div>
                 </div>
-
-            </div>
-            <div class="sa-entity-layout" data-sa-container-query='{"920":"sa-entity-layout--size--md"}'>
                 {{-- Profile Toasts --}}
                 @include('partials.status-messages')
                 {{-- Profile Toasts --}}
+            </div>
+            <div class="sa-entity-layout" data-sa-container-query='{"920":"sa-entity-layout--size--md"}'>
 
                 <div class="sa-entity-layout__body">
 

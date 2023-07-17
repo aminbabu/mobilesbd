@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Backend\BrandController;
+use App\Http\Controllers\Backend\ShowroomController;
+use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
@@ -83,11 +86,8 @@ if (!function_exists('dashboard_user_routes')) {
     {
         Route::middleware(['admin'])->prefix('users')->name('user.')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
-            Route::get('/create', [UserController::class, 'create'])->name('create');
-            Route::post('/create', [UserController::class, 'store'])->name('store');
-            Route::get('/user/{id}', [UserController::class, 'show'])->name('show');
-            Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
-            Route::patch('/{id}', [UserController::class, 'update'])->name('update');
+            Route::get('/register', [UserController::class, 'create'])->name('create');
+            Route::post('/register', [UserController::class, 'store'])->name('store');
             Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
         });
     }

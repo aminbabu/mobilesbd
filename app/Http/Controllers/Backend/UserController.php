@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Role;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
@@ -50,12 +50,12 @@ class UserController extends Controller
             'role_id' => ['required', 'string'],
         ]);
 
-        Admin::create([
+        $user = Admin::create([
             ...$validated,
             'password' => Hash::make($request->password),
         ]);
 
-        return back()->with('status', 'user-created');
+        return back()->with('status', 'profile-created');
     }
 
     /**
@@ -89,7 +89,7 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', Rule::unique(Admin::class)->ignore($id)],
+            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:admins,id,' . $id],
             'password' => ['required', Rules\Password::defaults()],
             'role_id' => ['required', 'string'],
         ]);
@@ -120,6 +120,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('dashboard.user.index')->with('status', 'user-deleted');
+        return back()->with('status', 'profile-deleted');
     }
 }

@@ -49,12 +49,13 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request, $role, $id): RedirectResponse
+    public function update(Request $request, $role, $id): RedirectResponse
     {
         $this->initLocalVariables($role, $id);
 
-        $this->user->fill($request->validated());
+        $profileUpdateRequest = new ProfileUpdateRequest($this->user);
 
+        $this->user->fill($request->validate($profileUpdateRequest->rules()));
 
         if ($this->user->isDirty('email')) {
             $this->user->email_verified_at = null;
@@ -80,7 +81,7 @@ class ProfileController extends Controller
     /**
      * Update the user's profile details.
      */
-    public function details(ProfileUpdateRequest $request, $role, $id): RedirectResponse
+    public function details(Request $request, $role, $id): RedirectResponse
     {
         $this->initLocalVariables($role, $id);
 

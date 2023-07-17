@@ -74,7 +74,7 @@
                                     <dl class="list-unstyled m-0 mt-4">
                                         <dt class="fs-exact-14 fw-medium">Status</dt>
                                         <dd class="fs-exact-13 text-muted mb-0 mt-1">
-                                            @if($user->status)
+                                            @if($user->status === 'acitve')
                                             <span class="sa-icon me-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                                     viewBox="0 0 24 24" fill="none" stroke="#00aa00" stroke-width="2"

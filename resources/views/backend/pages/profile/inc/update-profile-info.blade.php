@@ -57,7 +57,8 @@
                     <div style="width: 4.25rem;">
                         <select name="phone_country" class="form-select @error('phone') is-invalid @enderror">
                             @foreach (getCountries() as $countryCode => $countryName)
-                            <option value="{{ $countryCode }}" @selected(old('phone_country', $user->phone_country) ===
+                            <option value="{{ $countryCode }}" @selected(old('phone_country', $user->phone_country ?
+                                $user->phone_country : 'BD') ===
                                 $countryCode)>
                                 {{ $countryCode }}
                             </option>
